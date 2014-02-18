@@ -470,6 +470,9 @@ namespace NHibernate.Hql.Ast.ANTLR
 				var walker = new NodeTraverser(new ConstantConverter(_sfi));
 				walker.TraverseDepthFirst(ast);
 
+                var unicodeWalker = new NodeTraverser(new UnicodeConverter());
+                unicodeWalker.TraverseDepthFirst(ast);
+
 				return ast;
 			}
 			finally
@@ -477,6 +480,17 @@ namespace NHibernate.Hql.Ast.ANTLR
 				parser.ParseErrorHandler.ThrowQueryException();
 			}
 		}
+
+        class UnicodeConverter : IVisitationStrategy
+        {
+            public void Visit(IASTNode node)
+            {
+                if (node.Type == 124)
+                {
+                    node.Text = "N" + node.Text;
+                }
+            }
+        }
 
 		class ConstantConverter : IVisitationStrategy
 		{
