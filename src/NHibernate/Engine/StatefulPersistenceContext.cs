@@ -446,6 +446,9 @@ namespace NHibernate.Engine
 		/// </summary>
 		public object RemoveEntity(EntityKey key)
 		{
+		    if (!entitiesByKey.ContainsKey(key)) 
+                return null;
+
 			object tempObject = entitiesByKey[key];
 			entitiesByKey.Remove(key);
 			object entity = tempObject;
