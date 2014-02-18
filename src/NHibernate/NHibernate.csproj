@@ -37,13 +37,14 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug-2.0\</OutputPath>
+    <OutputPath>bin\Debug\</OutputPath>
     <BaseIntermediateOutputPath>obj\</BaseIntermediateOutputPath>
     <IntermediateOutputPath>obj\Debug-2.0\</IntermediateOutputPath>
     <DefineConstants>NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug-2.0\NHibernate.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <NoWarn>1591%3b3001%3b3002%3b3003%3b3004%3b3005</NoWarn>
     <WarningsAsErrors>1717;1574</WarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
@@ -92,7 +93,6 @@
     <Compile Include="AdoNet\MySqlClientBatchingBatcher.cs" />
     <Compile Include="AdoNet\MySqlClientBatchingBatcherFactory.cs" />
     <Compile Include="AdoNet\MySqlClientSqlCommandSet.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="AssertionFailure.cs" />
     <Compile Include="Bytecode\DefaultProxyFactoryFactory.cs" />
     <Compile Include="Cache\Access\ISoftLock.cs" />
