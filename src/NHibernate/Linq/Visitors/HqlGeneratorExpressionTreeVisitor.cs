@@ -186,7 +186,10 @@ namespace NHibernate.Linq.Visitors
 
 		protected HqlTreeNode VisitNhSum(NhSumExpression expression)
 		{
-			return _hqlTreeBuilder.Cast(_hqlTreeBuilder.Sum(VisitExpression(expression.Expression).AsExpression()), expression.Type);
+		    var sum = _hqlTreeBuilder.Sum(VisitExpression(expression.Expression).AsExpression());
+		    var cast = _hqlTreeBuilder.Cast(sum, expression.Type);
+		    var coalesce = _hqlTreeBuilder.Coalesce(cast, _hqlTreeBuilder.Constant(0));
+		    return coalesce;
 		}
 
 		protected HqlTreeNode VisitNhDistinct(NhDistinctExpression expression)
