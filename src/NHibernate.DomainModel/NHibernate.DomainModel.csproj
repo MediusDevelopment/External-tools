@@ -71,7 +71,6 @@
     <Compile Include="A.cs" />
     <Compile Include="Abstract.cs" />
     <Compile Include="AbstractProxy.cs" />
-    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Assignable.cs" />
     <Compile Include="B.cs" />
     <Compile Include="Bar.cs" />
@@ -279,12 +278,6 @@
     <EmbeddedResource Include="Northwind\Mappings\User.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NHibernate\NHibernate.csproj">
-      <Project>{5909BFE7-93CF-4E5F-BE22-6293368AF01D}</Project>
-      <Name>NHibernate</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="NHSpecific\GetSetHelper.hbm.xml" />
     <EmbeddedResource Include="NHSpecific\Optimistic.hbm.xml" />
   </ItemGroup>
@@ -313,6 +306,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NHibernate\NHibernate.csproj">
+      <Project>{5909bfe7-93cf-4e5f-be22-6293368af01d}</Project>
+      <Name>NHibernate</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
