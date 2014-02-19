@@ -61,6 +61,12 @@
     <NoWarn>3001%3b3002%3b3003%3b3004%3b3005</NoWarn>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>true</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>NHibernate.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -1817,6 +1823,7 @@
     <None Include="Hql\Ast\ANTLR\SqlGenerator.g" />
     <None Include="NHibernate.build" />
     <None Include="NHibernate.nuspec.template" />
+    <None Include="NHibernate.snk" />
     <None Include="Type\IType.cs.xmldoc" />
   </ItemGroup>
   <ItemGroup>
