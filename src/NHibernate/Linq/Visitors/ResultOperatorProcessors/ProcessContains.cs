@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Linq;
 using NHibernate.Hql.Ast;
 using Remotion.Linq.Clauses.ResultOperators;
@@ -53,7 +53,7 @@ namespace NHibernate.Linq.Visitors.ResultOperatorProcessors
 
 		private static HqlAlias GetFromAlias(HqlTreeNode node)
 		{
-			return node.NodesPreOrder.Single(n => n is HqlRange).Children.Single(n => n is HqlAlias) as HqlAlias;
+			return node.NodesPreOrder.First(n => n is HqlRange).Children.Single(n => n is HqlAlias) as HqlAlias;
 		}
 
 		private static bool IsEmptyList(HqlParameter source, VisitorParameters parameters)
