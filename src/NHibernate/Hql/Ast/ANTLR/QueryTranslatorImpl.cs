@@ -485,7 +485,7 @@ namespace NHibernate.Hql.Ast.ANTLR
         {
             public void Visit(IASTNode node)
             {
-                if (node.Type == 124)
+                if (node.Type == HqlLexer.QUOTED_String)
                 {
                     node.Text = "N" + node.Text;
                 }
