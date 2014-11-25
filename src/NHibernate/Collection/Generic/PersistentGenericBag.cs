@@ -43,7 +43,7 @@ namespace NHibernate.Collection.Generic
 		/// in the mapping dtd that <bag> allows <one-to-many>.
 		/// Anyway, here we implement <set> semantics for a
 		/// <one-to-many> <bag>!
-		private IList<T> _gbag;
+		private IList<T> gbag;
 
 		public PersistentGenericBag()
 		{
@@ -57,20 +57,20 @@ namespace NHibernate.Collection.Generic
 		public PersistentGenericBag(ISessionImplementor session, IEnumerable<T> coll)
 			: base(session)
 		{
-			_gbag = coll as IList<T> ?? new List<T>(coll);
+			gbag = coll as IList<T> ?? new List<T>(coll);
 			SetInitialized();
 			IsDirectlyAccessible = true;
 		}
 
 		protected IList<T> InternalBag
 		{
-			get { return _gbag; }
-			set { _gbag = value; }
+			get { return gbag; }
+			set { gbag = value; }
 		}
 
 		public override bool Empty
 		{
-			get { return _gbag.Count == 0; }
+			get { return gbag.Count == 0; }
 		}
 
 		public override bool RowUpdatePossible
@@ -114,7 +114,7 @@ namespace NHibernate.Collection.Generic
 			// meaning of Add - instead of returning the index it was added at 
 			// returns a "fake" index - not consistent with IList interface...
 			var count = !IsOperationQueueEnabled
-							? _gbag.Count
+							? gbag.Count
 							: 0;
 			return count - 1;
 		}
@@ -148,12 +148,12 @@ namespace NHibernate.Collection.Generic
 		public IEnumerator<T> GetEnumerator()
 		{
 			Read();
-			return _gbag.GetEnumerator();
+			return gbag.GetEnumerator();
 		}
 
 		public int Count
 		{
-			get { return ReadSize() ? CachedSize : _gbag.Count; }
+			get { return ReadSize() ? CachedSize : gbag.Count; }
 		}
 
 		public bool IsReadOnly
@@ -166,7 +166,7 @@ namespace NHibernate.Collection.Generic
 			if (!IsOperationQueueEnabled)
 			{
 				Write();
-				_gbag.Add(item);
+				gbag.Add(item);
 			}
 			else
 			{
@@ -183,9 +183,9 @@ namespace NHibernate.Collection.Generic
 			else
 			{
 				Initialize(true);
-				if (_gbag.Count != 0)
+				if (gbag.Count != 0)
 				{
-					_gbag.Clear();
+					gbag.Clear();
 					Dirty();
 				}
 			}
@@ -194,7 +194,7 @@ namespace NHibernate.Collection.Generic
 		public bool Contains(T item)
 		{
 			var exists = ReadElementExistence(item);
-			return !exists.HasValue ? _gbag.Contains(item) : exists.Value;
+			return !exists.HasValue ? gbag.Contains(item) : exists.Value;
 		}
 
 		public void CopyTo(T[] array, int arrayIndex)
@@ -208,7 +208,7 @@ namespace NHibernate.Collection.Generic
 		public bool Remove(T item)
 		{
 			Initialize(true);
-			var result = _gbag.Remove(item);
+			var result = gbag.Remove(item);
 			if (result)
 			{
 				Dirty();
@@ -221,31 +221,31 @@ namespace NHibernate.Collection.Generic
 			get
 			{
 				Read();
-				return _gbag[index];
+				return gbag[index];
 			}
 			set
 			{
 				Write();
-				_gbag[index] = value;
+				gbag[index] = value;
 			}
 		}
 
 		public int IndexOf(T item)
 		{
 			Read();
-			return _gbag.IndexOf(item);
+			return gbag.IndexOf(item);
 		}
 
 		public void Insert(int index, T item)
 		{
 			Write();
-			_gbag.Insert(index, item);
+			gbag.Insert(index, item);
 		}
 
 		public void RemoveAt(int index)
 		{
 			Write();
-			_gbag.RemoveAt(index);
+			gbag.RemoveAt(index);
 		}
 
 		public override bool AfterInitialize(ICollectionPersister persister)
@@ -255,16 +255,16 @@ namespace NHibernate.Collection.Generic
 			bool result;
 			if (persister.IsOneToMany && HasQueuedOperations)
 			{
-				var additionStartFrom = _gbag.Count;
+				var additionStartFrom = gbag.Count;
 				IList additionQueue = new List<object>(additionStartFrom);
 				foreach (var o in QueuedAdditionIterator)
 				{
 					if (o != null)
 					{
-						for (var i = 0; i < _gbag.Count; i++)
+						for (var i = 0; i < gbag.Count; i++)
 						{
 							// we are using ReferenceEquals to be sure that is exactly the same queued instance 
-							if (ReferenceEquals(o, _gbag[i]))
+							if (ReferenceEquals(o, gbag[i]))
 							{
 								additionQueue.Add(o);
 								break;
@@ -280,11 +280,11 @@ namespace NHibernate.Collection.Generic
 					// removing duplicated additions
 					foreach (var o in additionQueue)
 					{
-						for (var i = additionStartFrom; i < _gbag.Count; i++)
+						for (var i = additionStartFrom; i < gbag.Count; i++)
 						{
-							if (ReferenceEquals(o, _gbag[i]))
+							if (ReferenceEquals(o, gbag[i]))
 							{
-								_gbag.RemoveAt(i);
+								gbag.RemoveAt(i);
 								break;
 							}
 						}
@@ -300,17 +300,17 @@ namespace NHibernate.Collection.Generic
 
 		public override void BeforeInitialize(ICollectionPersister persister, int anticipatedSize)
 		{
-			_gbag = (IList<T>) persister.CollectionType.Instantiate(anticipatedSize);
+			gbag = (IList<T>) persister.CollectionType.Instantiate(anticipatedSize);
 		}
 
 		public override object Disassemble(ICollectionPersister persister)
 		{
-			var length = _gbag.Count;
+			var length = gbag.Count;
 			var result = new object[length];
 
 			for (var i = 0; i < length; i++)
 			{
-				result[i] = persister.ElementType.Disassemble(_gbag[i], Session, null);
+				result[i] = persister.ElementType.Disassemble(gbag[i], Session, null);
 			}
 
 			return result;
@@ -318,7 +318,7 @@ namespace NHibernate.Collection.Generic
 
 		public override IEnumerable Entries(ICollectionPersister persister)
 		{
-			return _gbag;
+			return gbag;
 		}
 
 		public override bool EntryExists(object entry, int i)
@@ -332,14 +332,14 @@ namespace NHibernate.Collection.Generic
 			var entityMode = Session.EntityMode;
 
 			var sn = (IList) GetSnapshot();
-			if (sn.Count != _gbag.Count)
+			if (sn.Count != gbag.Count)
 			{
 				return false;
 			}
 
-			foreach (var elt in _gbag)
+			foreach (var elt in gbag)
 			{
-				if (CountOccurrences(elt, _gbag, elementType, entityMode) != CountOccurrences(elt, sn, elementType, entityMode))
+				if (CountOccurrences(elt, gbag, elementType, entityMode) != CountOccurrences(elt, sn, elementType, entityMode))
 				{
 					return false;
 				}
@@ -358,14 +358,14 @@ namespace NHibernate.Collection.Generic
 			foreach (var old in sn)
 			{
 				var found = false;
-				if (_gbag.Count > i && elementType.IsSame(old, _gbag[i++], entityMode))
+				if (gbag.Count > i && elementType.IsSame(old, gbag[i++], entityMode))
 				{
 					//a shortcut if its location didn't change!
 					found = true;
 				}
 				else
 				{
-					foreach (object newObject in _gbag)
+					foreach (object newObject in gbag)
 					{
 						if (elementType.IsSame(old, newObject, entityMode))
 						{
@@ -395,14 +395,14 @@ namespace NHibernate.Collection.Generic
 		public override ICollection GetOrphans(object snapshot, string entityName)
 		{
 			var sn = (ICollection) snapshot;
-			return GetOrphans(sn, (ICollection) _gbag, entityName, Session);
+			return GetOrphans(sn, (ICollection) gbag, entityName, Session);
 		}
 
 		public override object GetSnapshot(ICollectionPersister persister)
 		{
 			var entityMode = Session.EntityMode;
-			var clonedList = new List<object>(_gbag.Count);
-			foreach (object current in _gbag)
+			var clonedList = new List<object>(gbag.Count);
+			foreach (object current in gbag)
 			{
 				clonedList.Add(persister.ElementType.DeepCopy(current, entityMode, persister.Factory));
 			}
@@ -431,7 +431,7 @@ namespace NHibernate.Collection.Generic
 				var element = persister.ElementType.Assemble(array[i], Session, owner);
 				if (element != null)
 				{
-					_gbag.Add((T) element);
+					gbag.Add((T) element);
 				}
 			}
 		}
@@ -443,7 +443,7 @@ namespace NHibernate.Collection.Generic
 
 		public override bool IsWrapper(object collection)
 		{
-			return _gbag == collection;
+			return gbag == collection;
 		}
 
 		public override bool NeedsInserting(object entry, int i, IType elemType)
@@ -497,14 +497,14 @@ namespace NHibernate.Collection.Generic
 			// The NH-750 test show how checking for null we are ignoring the not-found tag and
 			// the DB may have some records ignored by NH. This issue may need some more deep consideration.
 			//if (element != null)
-			_gbag.Add((T) element);
+			gbag.Add((T) element);
 			return element;
 		}
 
 		public override string ToString()
 		{
 			Read();
-			return StringHelper.CollectionToString(_gbag);
+			return StringHelper.CollectionToString(gbag);
 		}
 
 		/// <summary>
@@ -553,7 +553,7 @@ namespace NHibernate.Collection.Generic
 
 			public void Operate()
 			{
-				_enclosingInstance._gbag.Clear();
+				_enclosingInstance.gbag.Clear();
 			}
 		}
 
@@ -580,7 +580,7 @@ namespace NHibernate.Collection.Generic
 
 			public void Operate()
 			{
-				_enclosingInstance._gbag.Add(_value);
+				_enclosingInstance.gbag.Add(_value);
 			}
 		}
 	}
