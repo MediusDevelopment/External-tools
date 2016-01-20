@@ -317,9 +317,15 @@ namespace NHibernate.Engine
 		/// <summary> Called after transactions end</summary>
 		public void AfterTransactionCompletion()
 		{
-			// Downgrade locks
-			foreach (EntityEntry entityEntry in entityEntries.Values)
-				entityEntry.LockMode = LockMode.None;
+		    try
+		    {
+		        // Downgrade locks
+		        foreach (EntityEntry entityEntry in entityEntries.Values)
+		            entityEntry.LockMode = LockMode.None;
+		    }
+		    catch (InvalidOperationException)
+		    {
+		    }
 		}
 
 		/// <summary>
