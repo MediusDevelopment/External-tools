@@ -1,3 +1,8 @@
+/*
+ * File was modified by Medius company 
+ * Date of modification: 18.02.2014
+ */
+
 using System;
 using System.Collections;
 using System.Collections.Generic;

@@ -1,3 +1,7 @@
+﻿/*
+ * File was modified by Medius company 
+ * Date of modification: 12.03.2014
+ */
 using System.Collections;
 using System.Linq;
 using NHibernate.Hql.Ast;
